@@ -22,15 +22,18 @@ body {
 }
 
 .popup{
-  width: 8rem  ;
-  padding: 1rem;
+  width: 8rem;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
-.popup img{
-  max-height: 150px;
-  width: auto;
-  max-width: 100%;
-  display: block;
-  align-content: center;
+.popup h2{
+  width: max-content;
+  color: tomato;
+  font-size: 13px;
+  border-bottom: 0.5px solid tomato;
+  margin: 3px 0;
 }
 
 .entry-form label,
@@ -41,4 +44,27 @@ body {
   font-size: 1rem;
   display: block;
   width: 100%;
+}
+
+.navbar{
+  position:absolute;
+  top: 1rem;
+  right: 1rem;
+}
+.button{
+  border: none;
+  padding: 0.3rem;
+  border-radius: 0.2rem;
+  color: white;
+  margin: 0.5rem;
+  width: 6rem;
+}
+.logout{
+  background-color:tomato;
+}
+.login{
+  background-color:teal;
+}
+.register{
+  background-color:slateblue;
 }

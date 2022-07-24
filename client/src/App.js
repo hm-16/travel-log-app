@@ -1,8 +1,11 @@
 import * as React from "react";
 import Map, { Marker, Popup } from "react-map-gl";
 import { listLogEntries } from "./API";
+import Register from "./components/Register";
+import Login from "./components/Login";
 import LogEntryForm from "./LogEntryForm";
 function App() {
+  const [userEmail,setUserEmail] = React.useState(null);
   const [viewport, setViewport] = React.useState({
     longitude: 83,
     latitude: 23.5,
@@ -11,15 +14,18 @@ function App() {
   const [addEntryLocation, setAddEntryLocation] = React.useState(null);
   const [showPopup, setShowPopup] = React.useState({});
   const [logEntries, setLogEntries] = React.useState([]);
-
+  const [showRegister,setShowRegister] = React.useState(false);
+  const [showLogin,setShowLogin] = React.useState(false);
   const getEntries = async () => {
-    const logEntries = await listLogEntries();
+    const logEntries = await listLogEntries(userEmail);
     setLogEntries(logEntries);
   };
 
   React.useEffect(() => {
     getEntries();
-  }, []);
+    setShowLogin(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[userEmail]);
 
   const showAddMarkerPopup = (event) => {
     setAddEntryLocation({
@@ -34,7 +40,7 @@ function App() {
       onMove={(evt) => setViewport(evt.viewState)}
       style={{ width: "100vw", height: "100vh" }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
-      onDblClick={(e) => showAddMarkerPopup(e)}
+      onDblClick={(e) => {if(userEmail) showAddMarkerPopup(e)}}
     >
       {logEntries.map((entry) => (
         <Marker
@@ -79,16 +85,14 @@ function App() {
               onClose={() => setShowPopup({ ...showPopup, [entry._id]: false })}
             >
               <div className="popup">
-                <h3>{entry.title}</h3>
-                <p>{entry.comments}</p>
-                <small>
-                  <i>
-                    Visited on:{new Date(entry.visitDate).toLocaleDateString()}
-                  </i>
-                </small>
-                {entry.image ? (
-                  <img src={entry.image} alt={entry.title} />
-                ) : null}
+               <h2>Title</h2>
+               <p>{entry.title}</p>
+               <h2>Review</h2>
+                <p>{entry.description}</p>
+                <h2>Rating</h2>
+                <p>{entry.rating}</p>
+                <h2>Visit Date</h2>
+                <p>{new Date(entry.visitDate).toDateString()}</p>
               </div>
             </Popup>
           ) : null}
@@ -133,6 +137,7 @@ function App() {
               onClose={() => setAddEntryLocation(null)}
             >
               <LogEntryForm
+                email = {userEmail}
                 onClose={() => {
                   setAddEntryLocation(null);
                   getEntries();
@@ -143,6 +148,21 @@ function App() {
           </Marker>
         </>
       ) : null}
+      <div className="navbar">
+        {userEmail && <button className="button logout" onClick={()=> setUserEmail(null)}>Logout</button>}
+        {!userEmail &&<>
+        <button className="button register" onClick={() => {
+          setShowRegister(true);
+          setShowLogin(false);
+          }}>Register</button>
+        <button className="button login" onClick={() => {
+          setShowLogin(true);
+          setShowRegister(false);
+          }}>Login</button>
+        </>}
+      </div>
+      {showRegister && <Register setShowRegister={setShowRegister}/>}
+      {showLogin && <Login setShowLogin={setShowLogin} setUserEmail ={setUserEmail}/>}
     </Map>
   );
 }
