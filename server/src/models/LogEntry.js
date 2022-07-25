@@ -7,16 +7,15 @@ const requiredNumber = {
 
 const LogEntrySchema = new Schema(
   {
+    email : {type:String,required:true},
     title: { type: String, required: true },
     description: String,
-    comments: String,
     rating: {
       type: Number,
       min: 0,
       max: 10,
       default: 0,
     },
-    image: String,
     latitude: {
       ...requiredNumber,
       min: -90,
@@ -37,6 +36,4 @@ const LogEntrySchema = new Schema(
   }
 );
 
-const LogEntry = mongoose.model("LogEntry", LogEntrySchema);
-
-module.exports = LogEntry;
+module.exports = mongoose.model("LogEntry", LogEntrySchema);

@@ -8,18 +8,17 @@ const morgan = require("morgan"); /* tool for debugging,it will log all the requ
 const helmet = require("helmet"); /* removes headers which contains critical information about our app.Also adds few headers. */
 const cors = require("cors");
 const mongoose = require("mongoose");
-
 require("dotenv").config();
 
 const middlewares = require("./middlewares");
 const logs = require('./api/logs');
-
+const users = require('./api/users');
 const app = express();
 
 mongoose.connect(process.env.DATABASE_URL, {
    useNewUrlParser: true,
    useUnifiedTopology: true
-});
+}).catch(err=>{console.log(err);});
 
 app.use(morgan("common"));
 app.use(helmet());
@@ -37,6 +36,7 @@ app.get("/", (req, res) => {
   });
 });
 
+app.use('/api/users',users);
 app.use('/api/logs',logs);
 
 /* middleware to handel 'not found' / invalid url request */
