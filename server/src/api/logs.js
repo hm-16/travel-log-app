@@ -25,5 +25,12 @@ router.post("/", async (req, res, next) => {
     next(error);
   }
 });
-
+router.post("/delete/:logId",async(req,res,next)=>{
+  try {
+    await LogEntry.deleteOne({_id:req.params.logId});
+  } catch (error) {
+    next(error);
+  }
+  
+})
 module.exports = router;

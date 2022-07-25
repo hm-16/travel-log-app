@@ -1,3 +1,4 @@
+import axios from "axios";
 
 export async function listLogEntries(email){
     const response = await fetch(`/logs/${email}`);
@@ -12,5 +13,10 @@ export async function createLogEntries(entry){
         },
         body: JSON.stringify(entry),
     });
+    return response.json();
+}
+
+export async function deleteEntry(logId){
+    const response = await axios.post(`/logs/delete/${logId}`);
     return response.json();
 }
