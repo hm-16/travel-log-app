@@ -1,6 +1,6 @@
 import * as React from "react";
 import Map, { Marker, Popup } from "react-map-gl";
-import { listLogEntries } from "./API";
+import { listLogEntries,deleteEntry } from "./API";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import LogEntryForm from "./LogEntryForm";
@@ -47,7 +47,7 @@ function App() {
       onMove={(evt) => setViewport(evt.viewState)}
       style={{ width: "100vw", height: "100vh" }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
-      onDblClick={(e) => {if(userEmail) showAddMarkerPopup(e)}}
+      onDblClick={(e) => {(userEmail)?showAddMarkerPopup(e):setShowLogin(true)}}
     >
       {logEntries.map((entry) => (
         <Marker
@@ -100,6 +100,7 @@ function App() {
                 <p>{entry.rating}</p>
                 <h2>Visit Date</h2>
                 <p>{new Date(entry.visitDate).toDateString()}</p>
+                <button className="button" onClick={() => {deleteEntry(entry._id);getEntries();}}>Delete</button>
               </div>
             </Popup>
           ) : null}
