@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRef, useState } from "react";
 import "./login.css";
-export default function Login({setShowLogin,setUserEmail}){
+export default function Login({setShowLogin,storage,setUserEmail}){
     const [error,setError] = useState(false);
     const emailRef = useRef();
     const passwordRef = useRef();
@@ -15,7 +15,9 @@ export default function Login({setShowLogin,setUserEmail}){
 
         try {
             const res = await axios.post("/users/login",user);
+            storage.setItem("email",res.data.email);
             setUserEmail(res.data.email);
+            setShowLogin(false);
             setError(false);
         } catch (err) {
             setError(true);

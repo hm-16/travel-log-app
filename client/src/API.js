@@ -1,11 +1,11 @@
-const API_URL = 'http://localhost:1337';
+
 export async function listLogEntries(email){
-    const response = await fetch(`${API_URL}/api/logs/${email}`);
+    const response = await fetch(`/logs/${email}`);
     return response.json();
 }
 
 export async function createLogEntries(entry){
-    const response = await fetch(`${API_URL}/api/logs`,{
+    const response = await fetch(`/logs`,{
         method: 'POST',
         headers: {
             'content-type': 'application/json',
